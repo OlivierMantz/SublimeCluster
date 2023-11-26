@@ -1,0 +1,51 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+    name: user-api
+spec:
+    replicas: 1
+    selector:
+        matchLabels:
+            app: user-api
+    template:
+        metadata:
+            labels:
+                app: user-api
+        spec:
+            containers:
+                - name: user-api
+                  image: olmantz/user_api
+                  imagePullPolicy: Always
+                  env:
+                      - name: PORT
+                        value: "80"
+                  resources:
+                      limits:
+                          memory: "64Mi"
+                          cpu: "128m"
+                  ports:
+                      - containerPort: 80
+                        name: http
+---
+  apiVersion: v1
+  kind: Service
+  metadata:
+    name: user-api-service
+  spec:
+    selector:
+        app: user-api
+    ports:
+    - port: 80
+      targetPort: 80
+
+# apiVersion: apps/v1
+# kind: Deployment
+# metadata:
+#     name: sublime-postapi-deployment
+# # ... (The rest of the PostAPI deployment configuration)
+# ---
+# apiVersion: v1
+# kind: Service
+# metadata:
+#    name: sublime-postapi-service
+# # ... (The rest of the PostAPI service configuration)
