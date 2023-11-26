@@ -15,7 +15,9 @@ kubectl delete pods --all
 
 ## Cluster creation
 ```k3d cluster create sublimeapp --servers 1 --agents 1 --port 9080:80@loadbalancer```
+
 or
+
 ```k3d cluster create sublimeapp```
 ## Pull docker image from dockerhub
 ```docker pull olmantz/user_api:latest```
@@ -35,6 +37,7 @@ or
 ```docker exec k3d-sublimeapp-server-0 cat /var/lib/rancher/k3s/server/node-token```
 
 ```kubectl create secret generic ocelot-secrets --from-literal=K8sToken='K8s_TOKEN'```
+
 K8S_token defined in secrets
 ## 2. Using the secret in the deployment yaml file
 Added secret in gateway.yaml file
