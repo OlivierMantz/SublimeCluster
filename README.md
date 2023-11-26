@@ -6,7 +6,9 @@ Tutorials used:
 https://medium.com/@TheLe0/running-a-net-application-on-a-local-kubernetes-cluster-1aff3537f755
 
 # Delete pods
-`kubectl delete pods --all`
+```bash
+kubectl delete pods --all
+```
 
 # Applying kubernetes configuration
 kubectl apply -f {file}
