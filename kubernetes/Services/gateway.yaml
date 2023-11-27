@@ -1,45 +1,45 @@
-# apiVersion: apps/v1
-# kind: Deployment
-# metadata:
-#   name: sublime-gateway
-# spec:
-#   replicas: 1
-#   selector:
-#     matchLabels:
-#       app: sublime-gateway
-#   template:
-#     metadata:
-#       labels:
-#         app: sublime-gateway
-#     spec:
-#       containers:
-#         - name: sublime-gateway
-#           image: olmantz/sublime_gateway:latest
-#           imagePullPolicy: Always
-#           ports:
-#             - containerPort: 80
-#               name: http
-#           env:
-#             - name: PORT
-#               value: "80"
-#             - name: K8s_Token
-#               valueFrom:
-#                 secretKeyRef:
-#                   name: ocelot-secrets
-#                   key: K8sToken
-#           resources:
-#             limits:
-#               memory: "64Mi"
-#               cpu: "128m"
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: sublime-gateway
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: sublime-gateway
+  template:
+    metadata:
+      labels:
+        app: sublime-gateway
+    spec:
+      containers:
+        - name: sublime-gateway
+          image: olmantz/sublime_gateway:latest
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 80
+              name: http
+          env:
+            - name: PORT
+              value: "80"
+            - name: K8s_Token
+              valueFrom:
+                secretKeyRef:
+                  name: ocelot-secrets
+                  key: K8sToken
+          resources:
+            limits:
+              memory: "64Mi"
+              cpu: "128m"
 
-# ---
-# apiVersion: v1
-# kind: Service
-# metadata:
-#   name: gateway-service
-# spec:
-#   selector:
-#     app: sublime-gateway
-#   ports:
-#     - port: 80
-#       targetPort: 80
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: gateway-service
+spec:
+  selector:
+    app: sublime-gateway
+  ports:
+    - port: 80
+      targetPort: 80

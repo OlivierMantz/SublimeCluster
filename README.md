@@ -14,7 +14,7 @@ kubectl delete pods --all
 ```kubectl apply -f {file}```
 
 ## Cluster creation
-```k3d cluster create sublimeapp --servers 1 --agents 1 --port 9080:80@loadbalancer```
+```k3d cluster create sublimeapp --servers 1 --agents 1 --port 8080:80@loadbalancer```
 
 or
 
@@ -23,7 +23,7 @@ or
 ```docker pull olmantz/user_api:latest```
 
 ## Adding backend to cluster
-```k3d image import olmantz/user_api:latest -c sublimeapp```
+Not necessary ```k3d image import olmantz/user_api:latest -c sublimeapp```
 ## Apply manifest
 ```kubectl apply -f userAPI.yaml```
 
@@ -33,6 +33,7 @@ or
 
 
 # Creating K8S token securely
+For Ocelot
 ## 1. Generate token and create  secret - K8s_TOKEN
 ```docker exec k3d-sublimeapp-server-0 cat /var/lib/rancher/k3s/server/node-token```
 
