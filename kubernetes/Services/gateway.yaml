@@ -22,11 +22,6 @@ spec:
           env:
             - name: PORT
               value: "80"
-            - name: K8s_Token
-              valueFrom:
-                secretKeyRef:
-                  name: ocelot-secrets
-                  key: K8sToken
           resources:
             limits:
               memory: "64Mi"

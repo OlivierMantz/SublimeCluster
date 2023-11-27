@@ -1,0 +1,49 @@
+version: "3"
+
+vars:
+    KUBE_DIR: "{{.TASKFILE_DIR}}/.kube" # Directory for kubeconfig
+    KUBECONFIG: "{{.KUBE_DIR}}/sublimeapp-kubeconfig.yaml" # Path to kubeconfig
+
+env:
+    KUBECONFIG: "{{.KUBECONFIG}}"
+
+
+tasks:
+    create-cluster:
+        desc: Create k3d cluster and generate kubeconfig
+        cmds:
+            - k3d cluster create sublimeapp --servers 1 --agents 1 --port 8080:80@loadbalancer
+            - powershell -Command "New-Item -Path '{{.KUBE_DIR}}' -ItemType Directory -Force"
+            - k3d kubeconfig get sublimeapp > sublimeapp-kubeconfig.yaml
+        silent: false
+
+    update-gitignore:
+        desc: Add kubeconfig to .gitignore
+        cmds:
+            - powershell -Command "If (!(Select-String -Path '.gitignore' -Pattern 'sublimeapp-kubeconfig.yaml' -ErrorAction SilentlyContinue)) { Add-Content '.gitignore' 'sublimeapp-kubeconfig.yaml' }"
+            - echo "Checked and updated .gitignore for sublimeapp-kubeconfig.yaml"
+        silent: false
+
+    apply-yamls:
+        desc: Apply all yaml files
+        cmds:
+            - kubectl apply -f ./kubernetes/Services
+        silent: false
+
+    port-forward:
+        desc: Port-forward traefik service from Kubernetes to local machine
+        cmds:
+            - kubectl port-forward svc/traefik -n kube-system 8080:80
+        silent: false
+
+    delete-cluster:
+        desc: Delete the k3d cluster
+        cmds:
+            - k3d cluster delete sublimeapp
+        silent: false
+
+    test-cluster:
+        desc: Test if the k3d cluster is correctly set up
+        cmds:
+            - kubectl get nodes
+        silent: false

@@ -2,6 +2,11 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
     name: user-api
+    labels:
+      app: user-api-service
+    annotations:
+      prometheus.io/port: '5432'
+      prometheus.io/scrape: 'true'
 spec:
     replicas: 1
     selector:

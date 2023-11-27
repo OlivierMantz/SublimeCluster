@@ -4,23 +4,46 @@ This repository handles the kubernetes cluster of the Sublime microservices.
 Tutorials used:
 
 https://medium.com/@TheLe0/running-a-net-application-on-a-local-kubernetes-cluster-1aff3537f755
-
+Using Task-Go and local .kube/config.
 # Delete pods
 ```bash
 kubectl delete pods --all
 ```
 
-# Applying kubernetes configuration
+# Applying kubernetes configuration 
 ```kubectl apply -f {file}```
 
 ## Cluster creation
+### Option 1 - Using Task
+As defined in the Taskfile.yaml
+```task create-cluster```
+```task set-kubeconfig```
+```task update-gitignore```
+```task apply-yamls```
+
+After waiting for a bit, Traefik pod is slow:
+
+```task port-forward```
+
+Or  all chained as:
+
+```task create-cluster update-gitignore apply-yamls port-forward```
+
+### Option 2 - Manually setting cluster with local config
+With local kube configuration file 
 ```k3d cluster create sublimeapp --servers 1 --agents 1 --port 8080:80@loadbalancer```
+creating local configuration
+```k3d kubeconfig get sublimeapp > sublimeapp-kubeconfig.yaml```
+and setting environmental variable
+```$env:KUBECONFIG = (Get-Location).Path + "\sublimeapp-kubeconfig.yaml"```
+
 
 or
 
+### Option 2 - Simple cluster
 ```k3d cluster create sublimeapp```
 ## Pull docker image from dockerhub
-```docker pull olmantz/user_api:latest```
+Not necessary```docker pull olmantz/user_api:latest```
 
 ## Adding backend to cluster
 Not necessary ```k3d image import olmantz/user_api:latest -c sublimeapp```
