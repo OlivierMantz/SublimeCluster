@@ -9,7 +9,8 @@ Using Task-Go and local .kube/config.
 ```bash
 kubectl delete pods --all
 ```
-
+# Accessing Azure cluster
+az aks get-credentials --resource-group WebApp --name Cluster
 # Applying kubernetes configuration 
 ```kubectl apply -f {file}```
 

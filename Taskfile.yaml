@@ -31,7 +31,7 @@ tasks:
         silent: false
 
     port-forward:
-        desc: Port-forward traefik service from Kubernetes to local machine
+        desc: (Not necessary) Port-forward traefik service from Kubernetes to local machine
         cmds:
             - kubectl port-forward svc/traefik -n kube-system 8080:80
         silent: false
