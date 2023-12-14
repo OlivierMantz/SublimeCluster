@@ -1,10 +1,13 @@
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: sublime-api-ingress
+  name: ingress
+  annotations:
+    # Example annotation for NGINX Ingress Controller
+    nginx.ingress.kubernetes.io/enable-metrics: "true"
 spec:
   rules:
-  - host: api.localhost
+  - host: "api.localhost"
     http:
       paths:
       - path: /
@@ -14,3 +17,76 @@ spec:
             name: gateway-service
             port:
               number: 80
+# apiVersion: networking.k8s.io/v1
+# kind: Ingress
+# metadata:
+#   name: ingress-service
+#   namespace: ingress-nginx
+#   annotations:
+#     nginx.ingress.kubernetes.io/rewrite-target: /
+#     kubernetes.io/ingress.class: "nginx"
+
+# spec:
+#   ingressClassName: nginx
+#   rules:
+#   - host: api.localhost
+#     http:
+#       paths:
+#       - path: /
+#         pathType: Prefix
+#         backend:
+#           service:
+#             name: gateway-service
+#             port:
+#               number: 80
+# apiVersion: networking.k8s.io/v1
+# kind: Ingress
+# metadata:
+#   name: ingress-service
+#   annotations:
+#     nginx.ingress.kubernetes.io/ssl-redirect: "false"
+#     nginx.ingress.kubernetes.io/use-regex: "true"
+#     nginx.ingress.kubernetes.io/rewrite-target: /$2
+# spec:
+#   ingressClassName: nginx
+#   rules:
+#   - host: api.localhost
+#     http:
+#       paths:
+#       - path: /
+#         pathType: Prefix
+#         backend:
+#           service:
+#             name: gateway-service
+#             port:
+#               number: 80
+# ---
+# apiVersion: apps/v1
+# kind: Deployment
+# metadata:
+#   name: gateway-service
+# spec:
+#   replicas: 1
+#   selector:
+#     matchLabels:
+#       app: gateway-service
+#   template:
+#     metadata:
+#       labels:
+#         app: gateway-service
+#     spec:
+#       containers:
+#         - name: gateway-service
+#           image: olmantz/sublime_gateway:latest
+#           imagePullPolicy: Always
+#           ports:
+#             - containerPort: 80
+#               name: http
+#           env:
+#             - name: PORT
+#               value: "80"
+#           resources:
+#             limits:
+#               memory: "64Mi"
+#               cpu: "128m"
+# ---

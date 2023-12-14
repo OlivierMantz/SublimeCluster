@@ -38,7 +38,7 @@ spec:
     spec:
       containers:
         - name: gateway-service
-          image: olmantz/sublime_gateway:kube
+          image: olmantz/sublime_gateway:kube-local
           imagePullPolicy: Always
           ports:
             - containerPort: 80

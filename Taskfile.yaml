@@ -14,6 +14,7 @@ tasks:
         cmds:
             - k3d cluster create sublimeapp --servers 1 --agents 1 --port 8080:80@loadbalancer
             - powershell -Command "New-Item -Path '{{.KUBE_DIR}}' -ItemType Directory -Force"
+            # - k3d kubeconfig get sublimeapp > ~/.kube/config
             - k3d kubeconfig get sublimeapp > sublimeapp-kubeconfig.yaml
         silent: false
 
@@ -33,7 +34,8 @@ tasks:
     port-forward:
         desc: (Not necessary) Port-forward traefik service from Kubernetes to local machine
         cmds:
-            - kubectl port-forward svc/traefik -n kube-system 8080:80
+            # - kubectl port-forward svc/traefik -n kube-system 8080:80
+            - kubectl port-forward service/gateway-service -n default 8080:80
         silent: false
 
     delete-cluster:
@@ -46,4 +48,17 @@ tasks:
         desc: Test if the k3d cluster is correctly set up
         cmds:
             - kubectl get nodes
+        silent: false
+        
+    get-endpoints:
+        desc: Get the endpoints
+        cmds:
+            - kubectl get endpoints
+
+        silent: false
+
+    get-namespace:
+        desc: Get the endpoints
+        cmds:
+            - kubectl get namespace
         silent: false

@@ -2,11 +2,12 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
     name: user-api
-    labels:
-      app: user-api-service
-    annotations:
-      prometheus.io/port: '5432'
-      prometheus.io/scrape: 'true'
+    # namespace: ingress-nginx
+    # labels:
+    #   app: user-api-service
+    # annotations:
+    #   prometheus.io/port: '5432'
+    #   prometheus.io/scrape: 'true'
 spec:
     replicas: 1
     selector:
@@ -19,8 +20,11 @@ spec:
         spec:
             containers:
                 - name: user-api
-                  image: olmantz/user_api
+                  image: olmantz/user_api:latest
                   imagePullPolicy: Always
+                  ports:
+                      - containerPort: 80
+                        name: http
                   env:
                       - name: PORT
                         value: "80"
@@ -28,14 +32,12 @@ spec:
                       limits:
                           memory: "64Mi"
                           cpu: "128m"
-                  ports:
-                      - containerPort: 80
-                        name: http
 ---
   apiVersion: v1
   kind: Service
   metadata:
     name: user-api-service
+    # namespace: ingress-nginx
   spec:
     selector:
         app: user-api

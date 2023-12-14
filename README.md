@@ -5,6 +5,19 @@ Tutorials used:
 
 https://medium.com/@TheLe0/running-a-net-application-on-a-local-kubernetes-cluster-1aff3537f755
 Using Task-Go and local .kube/config.
+
+https://devopscube.com/setup-prometheus-monitoring-on-kubernetes/
+# Prometheus monitoring
+Port forwarding Prometheus:
+```bash
+kubectl port-forward prometheus-deployment-96898bbc9-fkphn 9090:9090 -n monitoring
+```
+Port forwarding Grafana:
+```bash
+kubectl port-forward grafana-569f9945cd-ngx8n 3000:3000 -n monitoring
+```
+
+
 # Delete pods
 ```bash
 kubectl delete pods --all
@@ -12,16 +25,38 @@ kubectl delete pods --all
 # Accessing Azure cluster
 az aks get-credentials --resource-group WebApp --name Cluster
 # Applying kubernetes configuration 
-```kubectl apply -f {file}```
+```bash
+kubectl apply -f {file}
+```
 
 ## Cluster creation
 ### Option 1 - Using Task
+#### Primary
 As defined in the Taskfile.yaml
-```task create-cluster```
+```bash
+task create-cluster
+```
+```bash
+task apply-yamls
+```
+#### Secondary
 ```task set-kubeconfig```
 ```task update-gitignore```
 ```task apply-yamls```
 
+    Not needed anymore
+
+    ```bash
+    k3d kubeconfig get sublimeapp > ~/.kube/config
+    ```
+! Only when using ingress controllers
+```bash
+kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/main/deploy/static/provider/cloud/deploy.yaml
+```
+
+
+
+Obsolete:
 After waiting for a bit, Traefik pod is slow:
 
 ```task port-forward```
