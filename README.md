@@ -16,7 +16,10 @@ Port forwarding Grafana:
 ```bash
 kubectl port-forward grafana-569f9945cd-ngx8n 3000:3000 -n monitoring
 ```
-
+Grafana templates:
+* 8588
+* 315
+* 13838
 
 # Delete pods
 ```bash
@@ -39,6 +42,21 @@ task create-cluster
 ```bash
 task apply-yamls
 ```
+##### Monitoring
+```bash
+task setup-prometheus
+```
+```bash
+task setup-kube-metrics
+```
+```bash
+task setup-grafana
+```
+
+```bash 
+task run-monitoring
+```
+
 #### Secondary
 ```task set-kubeconfig```
 ```task update-gitignore```

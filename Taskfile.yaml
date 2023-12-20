@@ -18,6 +18,32 @@ tasks:
             - k3d kubeconfig get sublimeapp > sublimeapp-kubeconfig.yaml
         silent: false
 
+    setup-prometheus:
+        desc: Setup namespace and all yamls
+        cmds: 
+            - kubectl create namespace monitoring
+            - kubectl apply -f ./kubernetes/Prometheus
+            # - kubectl create  -f clusterRole.yaml
+            # - kubectl create  -f config-map.yaml
+            # - kubectl create  -f prometheus-deployment.yaml
+            # - kubectl create  -f prometheus-service.yaml --namespace=monitoring
+    
+    setup-kube-metrics:
+        desc: Setup kube-state-metrics
+        cmds:
+            - kubectl apply -f ./kubernetes/Kube-state-metrics
+            - kubectl get deployments kube-state-metrics -n kube-system
+    
+    setup-grafana:
+            desc: Setup Grafana
+            cmds:
+                - kubectl apply -f ./kubernetes/Grafana
+
+    run-monitoring:
+        desc: Running Prometheus and Grafana
+        cmds: 
+            - kubectl port-forward grafana-569f9945cd-rwgrr 3000:3000 -n monitoring
+
     update-gitignore:
         desc: Add kubeconfig to .gitignore
         cmds:
