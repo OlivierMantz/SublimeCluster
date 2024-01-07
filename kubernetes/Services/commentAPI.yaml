@@ -1,0 +1,60 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: comment-api
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: comment-api
+  template:
+    metadata:
+      labels:
+        app: comment-api
+    spec:
+      containers:
+      - name: comment-api
+        image: olmantz/comment_api:main
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 80
+        env:
+        - name: ConnectionStrings__Postgres
+          value: "Host=postgres;Port=5432;Database=$(DB_NAME);Username=$(DB_USER);Password=$(DB_PASS)"
+        - name: Auth0__Domain
+          valueFrom:
+            secretKeyRef:
+              name: commentapi-secrets
+              key: Auth0Domain
+        - name: Auth0__Audience
+          valueFrom:
+            secretKeyRef:
+              name: commentapi-secrets
+              key: Auth0Audience
+        - name: CLIENT_ORIGIN_URL
+          valueFrom:
+            configMapKeyRef:
+              name: commentapi-configmap
+              key: CLIENT_ORIGIN_URL
+        resources:
+          requests:
+            memory: "256Mi"
+            cpu: "250m"
+          limits:
+            memory: "512Mi"
+            cpu: "500m"
+        envFrom:
+        - secretRef:
+            name: postgres-secrets
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: comment-api-service
+spec:
+  selector:
+    app: comment-api
+  ports:
+  - protocol: TCP
+    port: 80
+    targetPort: 80

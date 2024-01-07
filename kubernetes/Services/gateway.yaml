@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
       - name: gateway-service
-        image: olmantz/sublime_gateway:kube-local-default
+        image: olmantz/sublime_gateway:dev_auth
         ports:
         - containerPort: 80
         resources:

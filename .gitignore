@@ -348,3 +348,6 @@ MigrationBackup/
 
 .kube
 sublimeapp-kubeconfig.yaml
+kubernetes/Services/commentAPI-secrets.yaml
+kubernetes/Services/pgsecret.tx
+kubernetes/Services/pgSecret.yaml
