@@ -5,13 +5,27 @@ Tutorials used:
 
 https://medium.com/@TheLe0/running-a-net-application-on-a-local-kubernetes-cluster-1aff3537f755
 Using Task-Go and local .kube/config.
-
+# DB
+creating secret
+```bash
+kubectl create secret generic postgres-secret --from-literal=<password>
+```
+```bash
+kubectl create configmap commentapi-configmap --from-literal=CLIENT_ORIGIN_URL="http://localhost:5173"
+```
+```bash
+kubectl create secret generic db-credentials \
+--from-literal=DB_NAME=dbcomment \
+--from-literal=DB_USER=postgres \
+--from-literal=DB_PASS=<password>
+```
 https://devopscube.com/setup-prometheus-monitoring-on-kubernetes/
 # Prometheus monitoring
-Port forwarding Prometheus:
+Port forwarding Prometheus - not needed anymore:
 ```bash
 kubectl port-forward prometheus-deployment-96898bbc9-fkphn 9090:9090 -n monitoring
 ```
+kubectl port-forward svc/comment-api-service 8087:80
 Port forwarding Grafana:
 ```bash
 kubectl port-forward grafana-569f9945cd-ngx8n 3000:3000 -n monitoring
@@ -20,6 +34,7 @@ Grafana templates:
 * 8588
 * 315
 * 13838
+* 17506 - https://grafana.com/grafana/dashboards/17506-jmeter-performance-testing-dashboard/
 
 # Delete pods
 ```bash

@@ -1,41 +1,41 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: gateway-service
-  labels:
-    app: gateway-service
-spec:
-  replicas: 1
-  selector:
-    matchLabels:
-      app: gateway-service
-  template:
-    metadata:
-      labels:
+    name: gateway-service
+    labels:
         app: gateway-service
-    spec:
-      containers:
-      - name: gateway-service
-        image: olmantz/sublime_gateway:dev_auth
-        ports:
-        - containerPort: 80
-        resources:
-          limits:
-            memory: 512Mi
-            cpu: "128m"
+spec:
+    replicas: 1
+    selector:
+        matchLabels:
+            app: gateway-service
+    template:
+        metadata:
+            labels:
+                app: gateway-service
+        spec:
+            containers:
+                - name: gateway-service
+                  image: olmantz/sublime_gateway:dev_auth
+                  ports:
+                      - containerPort: 80
+                  resources:
+                      limits:
+                          memory: 512Mi
+                          cpu: "128m"
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: gateway-service
+    name: gateway-service
 spec:
-  type: LoadBalancer
-  selector:
-    app: gateway-service
-  ports:
-    - protocol: TCP
-      port: 80
-      targetPort: 80
+    type: LoadBalancer
+    selector:
+        app: gateway-service
+    ports:
+        - protocol: TCP
+          port: 80
+          targetPort: 80
 # # Local -> image tag set to latest
 # apiVersion: apps/v1
 # kind: Deployment

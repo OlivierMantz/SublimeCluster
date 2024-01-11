@@ -3,7 +3,6 @@ kind: Ingress
 metadata:
   name: ingress
   annotations:
-    # Example annotation for NGINX Ingress Controller
     nginx.ingress.kubernetes.io/enable-metrics: "true"
 spec:
   rules:
