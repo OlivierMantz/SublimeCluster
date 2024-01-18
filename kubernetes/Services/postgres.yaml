@@ -2,7 +2,10 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
     name: postgres
+    labels:
+        app: postgres
 spec:
+    replicas: 1
     selector:
         matchLabels:
             app: postgres
@@ -14,6 +17,15 @@ spec:
             containers:
                 - name: postgres
                   image: postgres:latest
+                  ports:
+                      - containerPort: 5432
+                  resources:
+                      requests:
+                          memory: "256Mi"
+                          cpu: "256m"
+                      limits:
+                          memory: "512Mi"
+                          cpu: "512m"
                   env:
                       - name: POSTGRES_DB
                         valueFrom:
@@ -30,15 +42,6 @@ spec:
                             secretKeyRef:
                                 name: db-credentials
                                 key: DB_PASS
-                  ports:
-                      - containerPort: 5432
-                  resources:
-                      requests:
-                          memory: "512Mi"
-                          cpu: "500m"
-                      limits:
-                          memory: "1Gi"
-                          cpu: "1000m"
 ---
 apiVersion: v1
 kind: Service
